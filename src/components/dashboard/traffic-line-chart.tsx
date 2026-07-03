@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 
 type TrafficPoint = {
   day: string;
@@ -80,18 +80,18 @@ export function TrafficLineChart({
 
   return (
     <div className={cn("space-y-3", className)}>
-      <div className="relative h-72 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-3 md:h-80 md:p-4">
-        <div className="pointer-events-none absolute inset-x-4 top-1/4 border-t border-slate-200/80" />
-        <div className="pointer-events-none absolute inset-x-4 top-1/2 border-t border-slate-200/80" />
-        <div className="pointer-events-none absolute inset-x-4 top-3/4 border-t border-slate-200/80" />
+      <div className="relative h-72 overflow-hidden rounded-lg border border-border bg-muted p-3 md:h-80 md:p-4">
+        <div className="pointer-events-none absolute inset-x-4 top-1/4 border-t border-border/60" />
+        <div className="pointer-events-none absolute inset-x-4 top-1/2 border-t border-border/60" />
+        <div className="pointer-events-none absolute inset-x-4 top-3/4 border-t border-border/60" />
 
         {!hasData ? (
           <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200">
+            <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-background text-muted-foreground shadow-sm ring-1 ring-border">
               <Share2 className="h-6 w-6" />
             </div>
-            <h3 className="mt-4 text-sm font-semibold text-slate-900">Belum ada data traffic</h3>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+            <h3 className="mt-4 text-sm font-semibold text-foreground">Belum ada data traffic</h3>
+            <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
               Bagikan public link untuk mulai melihat performa profil dan video publik di sini.
             </p>
             <Button size="sm" variant="secondary" className="mt-4">
@@ -103,28 +103,30 @@ export function TrafficLineChart({
             <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="relative z-10 h-full w-full">
               <defs>
                 <linearGradient id="trafficAreaFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#18181b" stopOpacity="0.22" />
-                  <stop offset="100%" stopColor="#18181b" stopOpacity="0.02" />
+                  <stop offset="0%" stopColor="currentColor" stopOpacity="0.15" />
+                  <stop offset="100%" stopColor="currentColor" stopOpacity="0.01" />
                 </linearGradient>
               </defs>
-              <polygon points={chartData.area} fill="url(#trafficAreaFill)" />
+              <polygon points={chartData.area} fill="url(#trafficAreaFill)" className="text-primary" />
               <polyline
                 points={chartData.visitorLine}
                 fill="none"
-                stroke="#94a3b8"
+                stroke="currentColor"
                 strokeWidth="1.4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeDasharray="3 3"
-                opacity="0.9"
+                opacity="0.5"
+                className="text-muted-foreground"
               />
               <polyline
                 points={chartData.line}
                 fill="none"
-                stroke="#18181b"
+                stroke="currentColor"
                 strokeWidth="2.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="text-foreground"
               />
               {chartData.values.map((item, index) => (
                 <circle
@@ -132,10 +134,11 @@ export function TrafficLineChart({
                   cx={item.x}
                   cy={item.y}
                   r={hoveredIndex === index ? 2.6 : 1.7}
-                  fill="#18181b"
-                  stroke="#ffffff"
+                  fill="currentColor"
+                  stroke="transparent"
                   strokeWidth="0.9"
-                  opacity={hoveredIndex === null || hoveredIndex === index ? 1 : 0.55}
+                  opacity={hoveredIndex === null || hoveredIndex === index ? 1 : 0.45}
+                  className="text-foreground"
                 />
               ))}
             </svg>
@@ -156,8 +159,8 @@ export function TrafficLineChart({
             </div>
 
             {hoveredIndex !== null ? (
-              <div className="absolute right-4 top-4 z-30 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500 shadow-sm">
-                <p className="font-semibold text-slate-900">{formatDayLabel(chartData.values[hoveredIndex].day)}</p>
+              <div className="absolute right-4 top-4 z-30 rounded-lg border border-border bg-popover px-3 py-2 text-xs text-muted-foreground shadow-sm">
+                <p className="font-semibold text-foreground">{formatDayLabel(chartData.values[hoveredIndex].day)}</p>
                 <p>{chartData.values[hoveredIndex].value} views</p>
                 <p>{chartData.values[hoveredIndex].uniqueVisitors} pengunjung unik</p>
               </div>
@@ -169,8 +172,8 @@ export function TrafficLineChart({
       {hasData ? (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {points.slice(Math.max(0, points.length - 4)).map((point) => (
-            <div key={point.day} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500 shadow-sm">
-              <p className="font-semibold text-slate-900">{formatDayLabel(point.day)}</p>
+            <div key={point.day} className="rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground shadow-sm">
+              <p className="font-semibold text-foreground">{formatDayLabel(point.day)}</p>
               <p>{point.views} views</p>
               <p>{point.uniqueVisitors} visitors</p>
             </div>

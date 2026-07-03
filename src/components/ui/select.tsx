@@ -189,20 +189,16 @@ function SelectScrollDownButton({
 
 function NativeSelect({
   className,
-  children,
   ...props
-}: React.ComponentProps<"select">) {
+}: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <select
-      data-slot="native-select"
       className={cn(
-        "flex h-8 w-full rounded-lg border border-input bg-background px-2.5 py-1 text-sm text-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-1 text-sm text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
-    >
-      {children}
-    </select>
+    />
   )
 }
 
@@ -214,8 +210,8 @@ export {
   SelectLabel,
   SelectScrollDownButton,
   SelectScrollUpButton,
+  NativeSelect,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-  NativeSelect,
 }

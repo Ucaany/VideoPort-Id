@@ -311,34 +311,34 @@ export function BillingPanel({
   }, [handleRefresh, pendingTransaction, router, searchParams]);
 
   return (
-    <div className="space-y-5 text-zinc-900">
+    <div className="space-y-5">
       {/* Warning banner: sisa hari < 7 (non-trial, non-free) */}
       {effectivePlanName !== "free" && activePlan.status === "active" && remainingDays > 0 && remainingDays <= 7 && (
-        <Card className={`dashboard-clean-card p-4 shadow-sm shadow-zinc-200/70 ${
+        <Card className={`p-4 shadow-sm ${
           remainingDays <= 3
-            ? "border-red-300 bg-red-50"
+            ? "border-destructive/30 bg-destructive/10"
             : "border-amber-200 bg-amber-50"
         }`}>
           <div className="flex items-start gap-3">
             <AlertTriangle className={`h-5 w-5 shrink-0 ${
-              remainingDays <= 3 ? "text-red-600" : "text-amber-600"
+              remainingDays <= 3 ? "text-destructive" : "text-amber-600"
             }`} />
             <div>
               <p className={`text-sm font-semibold ${
-                remainingDays <= 3 ? "text-red-900" : "text-amber-900"
+                remainingDays <= 3 ? "text-destructive" : "text-amber-900"
               }`}>
                 {remainingDays <= 3
-                  ? `⚠️ Paket akan berakhir dalam ${remainingDays} hari!`
+                  ? `Paket akan berakhir dalam ${remainingDays} hari!`
                   : `Paket akan berakhir dalam ${remainingDays} hari`}
               </p>
               <p className={`mt-1 text-sm ${
-                remainingDays <= 3 ? "text-red-700" : "text-amber-700"
+                remainingDays <= 3 ? "text-destructive/80" : "text-amber-700"
               }`}>
                 Perpanjang sekarang agar fitur {activePlanLabel} tetap aktif dan tidak terganggu.
               </p>
               <Button
                 size="sm"
-                className="mt-2 bg-zinc-800 hover:bg-zinc-700"
+                className="mt-2"
                 onClick={handleRenew}
                 disabled={!billingEnabled}
               >
@@ -352,20 +352,20 @@ export function BillingPanel({
 
       {/* Pending transaction card: user bisa bayar ulang */}
       {pendingTransaction && (
-        <Card className="dashboard-clean-card border-blue-200 bg-blue-50 p-4 shadow-sm shadow-zinc-200/70">
+        <Card className="border-primary/30 bg-primary/10 p-4 shadow-sm">
           <div className="flex items-start gap-3">
-            <Clock className="h-5 w-5 shrink-0 text-blue-600" />
+            <Clock className="h-5 w-5 shrink-0 text-primary" />
             <div className="flex-1">
-              <p className="text-sm font-semibold text-blue-900">
+              <p className="text-sm font-semibold text-foreground">
                 Menunggu Pembayaran
               </p>
-              <p className="mt-1 text-sm text-blue-700">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Transaksi <span className="font-mono font-semibold">{pendingTransaction.invoiceId}</span> untuk paket{" "}
                 <span className="font-semibold">{catalog[pendingTransaction.planName]?.label || pendingTransaction.planName}</span>{" "}
                 sebesar <span className="font-semibold">{toIdr(pendingTransaction.amount)}</span> menunggu pembayaran.
               </p>
               {pendingTransaction.expiredAt && (
-                <p className="mt-1 text-xs text-blue-600">
+                <p className="mt-1 text-xs text-muted-foreground">
                   <Clock className="mr-1 inline h-3 w-3" />
                   Sisa waktu: {getPaymentTimeRemaining(pendingTransaction.expiredAt) || "Segera berakhir"}
                 </p>
@@ -376,7 +376,7 @@ export function BillingPanel({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                  <Button size="sm">
                     <ExternalLink className="h-4 w-4" />
                     Bayar Sekarang
                   </Button>
@@ -391,21 +391,21 @@ export function BillingPanel({
         </Card>
       )}
 
-      <Card className="dashboard-clean-card overflow-hidden border-zinc-200 bg-white p-0 shadow-sm shadow-zinc-200/70">
+      <Card className="overflow-hidden border-border bg-card p-0 shadow-sm">
         <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="bg-[radial-gradient(circle_at_top_left,#f4f4f5,transparent_34%)] p-5 sm:p-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">
+          <div className="p-5 sm:p-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
               <CreditCard className="h-3.5 w-3.5" />
               Billing
             </div>
-            <h1 className="mt-4 font-display text-3xl font-semibold tracking-[-0.04em] text-zinc-950 sm:text-4xl">
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               Paket aktif kamu: {activePlanLabel}
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-500 sm:text-base">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
               Ringkasan paket, masa aktif, perpanjang, dan stop paket dibuat sederhana agar mudah dipantau.
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
-              <Button className="bg-zinc-900 text-white hover:bg-zinc-800" onClick={handleRenew} disabled={!billingEnabled}>
+              <Button onClick={handleRenew} disabled={!billingEnabled}>
                 <Sparkles className="h-4 w-4" />
                 {billingEnabled ? "Perpanjang" : "Coming Soon"}
               </Button>
@@ -420,20 +420,20 @@ export function BillingPanel({
             </div>
           </div>
 
-          <div className="border-t border-zinc-200 bg-[radial-gradient(circle_at_top_right,#e4e4e7,transparent_36%),linear-gradient(180deg,#fafafa,#f4f4f5)] p-5 sm:p-7 lg:border-l lg:border-t-0">
+          <div className="border-t border-border bg-muted/30 p-5 sm:p-7 lg:border-l lg:border-t-0">
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              <div className="rounded-[1.35rem] border border-zinc-200 bg-white/90 p-4 shadow-sm shadow-zinc-200/70">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">Harga Bulanan</p>
-                <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-zinc-950">{toIdr(activePrice)}</p>
-                <p className="mt-1 text-xs text-zinc-500">Status: <span className="font-semibold capitalize text-zinc-950">{activePlan.status}</span></p>
+              <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Harga Bulanan</p>
+                <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{toIdr(activePrice)}</p>
+                <p className="mt-1 text-xs text-muted-foreground">Status: <span className="font-semibold capitalize text-foreground">{activePlan.status}</span></p>
               </div>
-              <div className="rounded-[1.35rem] border border-zinc-200 bg-white/90 p-4 shadow-sm shadow-zinc-200/70">
-                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-500">
-                  <CalendarClock className="h-4 w-4 text-zinc-700" />
+              <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
+                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  <CalendarClock className="h-4 w-4" />
                   Sisa Masa Aktif
                 </p>
-                <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-zinc-950">{remainingDays} hari</p>
-                <p className="mt-1 text-xs text-zinc-500">Renewal: {formatDate(activePlan.renewalDate)}</p>
+                <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">{remainingDays} hari</p>
+                <p className="mt-1 text-xs text-muted-foreground">Renewal: {formatDate(activePlan.renewalDate)}</p>
               </div>
             </div>
           </div>
@@ -441,25 +441,25 @@ export function BillingPanel({
       </Card>
 
       {activePlan.status === "trial" && activePlan.renewalDate && (
-        <Card className="dashboard-clean-card overflow-hidden border-zinc-200 bg-zinc-50 p-5 shadow-sm shadow-zinc-200/70">
+        <Card className="overflow-hidden border-border bg-card p-5 shadow-sm">
           <div className="flex items-start gap-4">
             <span className="text-4xl">🎁</span>
             <div className="flex-1">
-              <p className="text-lg font-semibold text-zinc-950">
+              <p className="text-lg font-semibold text-foreground">
                 Trial Plan Creator Aktif
               </p>
-              <p className="mt-1 text-sm text-zinc-600">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Berakhir pada: {new Date(activePlan.renewalDate).toLocaleDateString("id-ID", {
                   day: "numeric",
                   month: "long",
                   year: "numeric"
                 })} ({remainingDays} hari lagi)
               </p>
-              <p className="mt-2 text-xs text-zinc-500">
+              <p className="mt-2 text-xs text-muted-foreground">
                 Setelah trial berakhir, akun akan otomatis turun ke plan Free. Upgrade sekarang untuk terus menggunakan fitur Creator!
               </p>
               <Link href="/dashboard/payment?plan=creator&intent=checkout" className="mt-3 inline-block">
-                <Button size="sm" className="bg-zinc-800 hover:bg-zinc-700">
+                <Button size="sm">
                   <Sparkles className="h-4 w-4" />
                   Upgrade ke Creator
                 </Button>
@@ -470,7 +470,7 @@ export function BillingPanel({
       )}
 
       {!billingEnabled ? (
-        <Card className="dashboard-clean-card border-amber-200 bg-amber-50 p-4 shadow-sm shadow-zinc-200/70">
+        <Card className="border-amber-200 bg-amber-50 p-4 shadow-sm">
           <div className="flex items-start gap-3">
             <span className="text-2xl">🚧</span>
             <div>
@@ -484,21 +484,21 @@ export function BillingPanel({
       ) : null}
 
       <section className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card className="dashboard-clean-card border-zinc-200 bg-white p-4 shadow-sm shadow-zinc-200/70 sm:p-5">
-          <h2 className="text-lg font-semibold text-zinc-950">Info Akun</h2>
+        <Card className="border-border bg-card p-4 shadow-sm sm:p-5">
+          <h2 className="text-lg font-semibold text-foreground">Info Akun</h2>
           <div className="mt-4">
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-zinc-500">Email Billing</p>
-              <p className="mt-1 truncate text-sm font-semibold text-zinc-950">{billingEmail}</p>
+            <div className="rounded-lg border border-border bg-muted p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">Email Billing</p>
+              <p className="mt-1 truncate text-sm font-semibold text-foreground">{billingEmail}</p>
             </div>
           </div>
         </Card>
 
-        <Card className="dashboard-clean-card border-zinc-200 bg-white p-4 shadow-sm shadow-zinc-200/70 sm:p-5">
+        <Card className="border-border bg-card p-4 shadow-sm sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-700">Transaksi</p>
-              <h2 className="mt-1 text-lg font-semibold text-zinc-950">Riwayat terbaru</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Transaksi</p>
+              <h2 className="mt-1 text-lg font-semibold text-foreground">Riwayat terbaru</h2>
             </div>
             <Link href="/dashboard/payment">
               <Button variant="secondary" size="sm">
@@ -510,15 +510,15 @@ export function BillingPanel({
 
           <div className="mt-4 space-y-3">
             {recentTransactions.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-500">
+              <div className="rounded-lg border border-dashed border-border bg-muted p-5 text-sm text-muted-foreground">
                 Belum ada transaksi.
               </div>
             ) : (
               recentTransactions.map((item) => (
-                <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-3">
+                <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-muted/50 p-3">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-zinc-950">{item.invoiceId}</p>
-                    <p className="text-xs text-zinc-500">
+                    <p className="truncate text-sm font-semibold text-foreground">{item.invoiceId}</p>
+                    <p className="text-xs text-muted-foreground">
                       {catalog[item.planName]?.label || item.planName} - {formatDate(item.createdAt)}
                     </p>
                   </div>
@@ -527,10 +527,10 @@ export function BillingPanel({
                       item.status === "paid"
                         ? "border-green-200 bg-green-50 text-green-700"
                         : item.status === "pending"
-                          ? "border-blue-200 bg-blue-50 text-blue-700"
+                          ? "border-primary/30 bg-primary/10 text-primary"
                           : item.status === "expired" || item.status === "failed"
-                            ? "border-red-200 bg-red-50 text-red-700"
-                            : "border-zinc-200 bg-white text-zinc-500"
+                            ? "border-destructive/30 bg-destructive/10 text-destructive"
+                            : "border-border bg-muted text-muted-foreground"
                     }`}>
                       {item.status === "paid" ? <CheckCircle2 className="h-3.5 w-3.5" /> : null}
                       {item.status === "pending" ? <Clock className="h-3.5 w-3.5" /> : null}
